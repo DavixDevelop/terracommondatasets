@@ -1,0 +1,16 @@
+[
+{
+  "modid": "terracommondatasets",
+  "name": "Terra++: Improved Datasets Add-on",
+  "description": "A TerraPlusPlus add-on that add's the common datasets for Koppen-Climate, Continents, WWF Biomes and Copernicus Global Dynamic Land Cover.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://buildtheearth.net",
+  "updateUrl": "",
+  "authorList": ["DavixDevelop"],
+  "credits": "Köppen-Geiger map made with the Present and future Köppen-Geiger climate classification maps at 1-km resolution: Beck, H.E., N.E. Zimmermann, T.R. McVicar, N. Vergopolan, A. Berg, E.F. Wood: Present and future Köppen-Geiger climate classification maps at 1-km resolution, Nature Scientific Data, 2018. Dataset. https://doi.org/10.6084/m9.figshare.6396959",
+  "logoFile": "assets/terracommondatasets/logo.png",
+  "screenshots": [],
+  "dependencies": ["terraplusplus"]
+}
+]

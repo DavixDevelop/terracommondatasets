@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "https://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+
+version = "0.2"
+group = "com.davixdevelop.terracommondatasets"
+archivesBaseName = "terracommondatasets"
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "1.12.2-14.23.5.2847"
+    runDir = "run"
+    mappings = "stable_39"
+}
+
+repositories {
+	maven {
+        name = "JitPack"
+        url = "https://jitpack.io/"
+    }
+    maven {
+        name = "OpenCollab Snapshots"
+        url = "https://repo.opencollab.dev/snapshot/"
+    }
+    maven {
+        name = "DaPorkchop_"
+        url = "https://maven.daporkchop.net/"
+    }
+}
+
+dependencies {
+	deobfProvided ("com.github.OpenCubicChunks.CubicChunks:cubicchunks:f71aafb9854466ac5ffa0ccd2796921684f1d8b1") {
+        transitive = false
+    }
+    deobfProvided ("com.github.OpenCubicChunks:CubicWorldGen:27de56d2f792513873584b2f8fd9f3082fb259ec") {
+        transitive = false
+    }
+    deobfProvided ("com.github.BuildTheEarth:terraplusplus:master-SNAPSHOT") {
+        transitive = true
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
