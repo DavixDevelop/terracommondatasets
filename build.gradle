@@ -47,9 +47,10 @@ dependencies {
     deobfProvided ("com.github.OpenCubicChunks:CubicWorldGen:27de56d2f792513873584b2f8fd9f3082fb259ec") {
         transitive = false
     }
-    deobfProvided ("com.github.BuildTheEarth:terraplusplus:master-SNAPSHOT") {
+    deobfProvided ("com.github.BuildTheEarth:terraplusplus:8207d314bac2e7681d4211b658eb3f26d3f18f1a") {
         transitive = true
     }
+    //master-SNAPSHOT
 }
 
 processResources {
