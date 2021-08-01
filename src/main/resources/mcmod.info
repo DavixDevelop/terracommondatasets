@@ -1,7 +1,7 @@
 [
 {
   "modid": "terracommondatasets",
-  "name": "Terra++: Improved Datasets Add-on",
+  "name": "Terra++: Improved Common Datasets Add-on",
   "description": "A TerraPlusPlus add-on that add's the common datasets for Koppen-Climate, Continents, WWF Biomes and Copernicus Global Dynamic Land Cover.",
   "version": "${version}",
   "mcversion": "${mcversion}",
