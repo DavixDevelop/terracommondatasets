@@ -1,7 +1,8 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "https://files.minecraftforge.net/maven" }
+        maven { url = "https://maven.daporkchop.net" }
+        //https://files.minecraftforge.net/maven
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -47,10 +48,9 @@ dependencies {
     deobfProvided ("com.github.OpenCubicChunks:CubicWorldGen:27de56d2f792513873584b2f8fd9f3082fb259ec") {
         transitive = false
     }
-    deobfProvided ("com.github.BuildTheEarth:terraplusplus:master-SNAPSHOT") {
+    deobfProvided ("com.github.BuildTheEarth:terraplusplus:8c9b9aaf40c8470af9d106944622ba2fc9f99ef8") {
         transitive = true
     }
-    //
 }
 
 processResources {
