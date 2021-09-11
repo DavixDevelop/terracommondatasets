@@ -8,14 +8,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = TerraImprovedCommonDatasetsMod.MODID,
-name = TerraImprovedCommonDatasetsMod.NAME,
-version = TerraImprovedCommonDatasetsMod.VERSION,
 dependencies = "required-after:terraplusplus@[0.1.519,)",
-acceptableRemoteVersions = "*")
+acceptableRemoteVersions = "*",
+useMetadata = true
+)
 public class TerraImprovedCommonDatasetsMod {
     public static final String MODID = "terracommondatasets";
-    public static final String NAME = "Terra++: Improved Common Datasets Addon";
-    public static final String VERSION = "0.2";
 
     public static Logger LOGGER;
 
