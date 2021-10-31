@@ -31,14 +31,17 @@ public class ContinentsDataset extends AbstractBuiltinDataset {
 
     private static final Ref<RLEByteArray> CACHE = Ref.soft((IOSupplier<RLEByteArray>) () -> {
         ByteBuf buffered;
-        try(InputStream is = new LzmaInputStream(ContinentsDataset.class.getResourceAsStream("continents_map.lzma"))){
-            buffered = Unpooled.wrappedBuffer(StreamUtil.toByteArray(is));
-        }
-
         RLEByteArray.Builder builder = RLEByteArray.builder();
-        for(int i = 0, s = buffered.readableBytes(); i < s; i++){
-            byte b = buffered.getByte(i);
-            builder.append(b);
+        try(LzmaInputStream is = new LzmaInputStream(ContinentsDataset.class.getResourceAsStream("continents_map.lzma"))){
+            byte[] buffer = new byte[4096];
+            int readBytes;
+            while((readBytes = is.read(buffer, 0, 4096)) != -1){
+                for(int i = 0; i < readBytes; i++){
+                    builder.append(buffer[i]);
+                }
+            }
+
+            //buffered = Unpooled.wrappedBuffer(StreamUtil.toByteArray(is));
         }
 
         return builder.build();

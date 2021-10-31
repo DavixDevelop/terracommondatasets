@@ -30,16 +30,21 @@ public class KoppenClimate extends AbstractBuiltinDataset {
     }
 
     private static final Ref<RLEByteArray> CACHE = Ref.soft((IOSupplier<RLEByteArray>) () -> {
-        ByteBuf buffered;
-        try(InputStream is = new LzmaInputStream(KoppenClimate.class.getResourceAsStream("koppen_map.lzma"))){
-            buffered = Unpooled.wrappedBuffer(StreamUtil.toByteArray(is));
-        }
-
+        ByteBuf buffered = null;
         RLEByteArray.Builder builder = RLEByteArray.builder();
-        for(int i = 0, s = buffered.readableBytes(); i < s; i++){
-            builder.append(buffered.getByte(i));
-
+        try(LzmaInputStream is = new LzmaInputStream(KoppenClimate.class.getResourceAsStream("koppen_map.lzma"))){
+            byte[] buffer = new byte[4096];
+            int readyBytes;
+            while((readyBytes = is.read(buffer, 0, 4096)) != -1){
+                for(int i = 0; i < readyBytes; i++){
+                    builder.append(buffer[i]);
+                }
+            }
         }
+
+        /*for(int i = 0, s = buffered.readableBytes(); i < s; i++){
+            builder.append(buffered.getByte(i));
+        }*/
 
         return builder.build();
     });
