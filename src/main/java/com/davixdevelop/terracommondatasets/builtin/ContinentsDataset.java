@@ -2,14 +2,10 @@ package com.davixdevelop.terracommondatasets.builtin;
 
 import LZMA.LzmaInputStream;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.buildtheearth.terraplusplus.dataset.builtin.AbstractBuiltinDataset;
-import net.buildtheearth.terraplusplus.util.RLEByteArray;
-import net.buildtheearth.terraplusplus.dep.net.daporkchop.lib.binary.oio.StreamUtil;
 import net.buildtheearth.terraplusplus.dep.net.daporkchop.lib.common.function.io.IOSupplier;
-import net.buildtheearth.terraplusplus.dep.net.daporkchop.lib.common.ref.Ref;
-
-import java.io.InputStream;
+import net.buildtheearth.terraplusplus.dep.net.daporkchop.lib.common.reference.cache.Cached;
+import net.buildtheearth.terraplusplus.util.RLEByteArray;
 
 import static net.buildtheearth.terraplusplus.dep.net.daporkchop.lib.common.math.PMath.floorI;
 
@@ -29,7 +25,7 @@ public class ContinentsDataset extends AbstractBuiltinDataset {
         super(COLUMNS, ROWS);
     }
 
-    private static final Ref<RLEByteArray> CACHE = Ref.soft((IOSupplier<RLEByteArray>) () -> {
+    private static final Cached<RLEByteArray> CACHE = Cached.global((IOSupplier<RLEByteArray>) () -> {
         ByteBuf buffered;
         RLEByteArray.Builder builder = RLEByteArray.builder();
         try(LzmaInputStream is = new LzmaInputStream(ContinentsDataset.class.getResourceAsStream("continents_map.lzma"))){
