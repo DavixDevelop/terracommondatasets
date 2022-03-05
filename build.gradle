@@ -13,7 +13,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "0.2-" + ('git rev-list --count HEAD'.execute().text.trim())
+version = "0.3." + ('git rev-list --count HEAD'.execute().text.trim())
 group = "com.davixdevelop.terracommondatasets"
 archivesBaseName = "terracommondatasets"
 
