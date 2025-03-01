@@ -26,8 +26,14 @@ After a successful build, copy the jar from `build/libs` to your mods folder and
 
 ## Development purposes
 
-Open the cloned repository in the command line. Next, execute `gradlew setupDecompWorkspace` if you are on Windows or `./gradlew setupDecompWorkspace` if you are on Linux/macOS.
-
-Next, if you are using Eclipse, execute `gradlew eclipse` (Windows) or `./gradlew eclipse` (Linux/macOS) then open the project in Eclipse.
+If you are using Eclipse, execute `gradlew eclipse` (Windows) or `./gradlew eclipse` (Linux/macOS) then open the project in Eclipse.
 
 If you are using IntelliJ IDEA, first import the project by selecting the build.gradle file when importing. After the project finishes importing, close IntelliJ IDEA and execute `gradlew genIntellijRuns` (Windows) or `./gradlew genIntellijRuns` (Linux/macOS). Then you can open IntelliJ IDEA again and open the project.
+
+>**IMPORTANT (Credit to SmylerMC):** Due to a bug with MIXIN, if a mod contains `mixin`, `coremod` and a `normal forge mod` it, when run in a dev environment adds CC as reparseable core mode, which cause FML to not load the CC forge mod.<br>
+> To trick `MixinPlatformAgentFMLLegacy#isIgnoredReparseable()` to load the forge mod, you must add a symlink to the CC jar (inside the .gradle cache folder) in your mods folder (run/mods).
+> Or you can add the `--mods` option to the CLI arguments (in the `runClient` configuration) to point to said CC jar, ex:<br>
+> `--mods=../../../../.gradle/caches/forge_gradle/deobf_dependencies/com/github/OpenCubicChunks/CubicChunks/1b8a0662a5_mapped_stable_39-1.12/CubicChunks-1b8a0662a5_mapped_stable_39-1.12.jar`
+> (Adjust the `../` amount to point to the jar)
+> 
+> The bug is supposed to be fixed in [Mixin: Issue 201](https://github.com/SpongePowered/Mixin/issues/207) but still happens as noted in [Mixin: Issue 319](https://github.com/SpongePowered/Mixin/issues/319).

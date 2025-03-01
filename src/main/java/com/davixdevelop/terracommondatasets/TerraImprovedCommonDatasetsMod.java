@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = TerraImprovedCommonDatasetsMod.MODID,
-dependencies = "required-after:terraplusplus@[0.1.627,)",
+dependencies = "required-after:terraplusplus@[1.1.0.639,)",
 acceptableRemoteVersions = "*",
 useMetadata = true
 )

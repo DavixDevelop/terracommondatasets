@@ -5,27 +5,60 @@ buildscript {
             name = "Minecraft Forge"
             url = "https://maven.minecraftforge.net/"
         }
+        gradlePluginPortal()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+plugins {
+    id 'eclipse'
+}
+apply plugin: 'net.minecraftforge.gradle'
 
-
-version = "0.3." + ('git rev-list --count HEAD'.execute().text.trim())
+version = "0.4." + ('git rev-list --count HEAD'.execute().text.trim())
 group = "com.davixdevelop.terracommondatasets"
 archivesBaseName = "terracommondatasets"
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
-    version = "1.12.2-14.23.5.2847"
-    runDir = "run"
-    mappings = "stable_39"
+    mappings channel: project.mapping_chanel, version: project.mapping_vers
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+
+            // Load the necessary coremods.
+            // (Credit - SmylerMC) IMPORTANT: For some reasons, MIXIN adds CC as a reparseable core mod when it loads, which causes FML to not load the regular CC mod.
+            // A workaround to that is to trick MixinPlatformAgentFMLLegacy#isIgnoredReparseable() with a symlink in the gradle cache directory,
+            // or add the --mods option that points to the CC jar in the gradle cache directory, ex (adjust the ../ amount):
+            // --mods=../../../../.gradle/caches/forge_gradle/deobf_dependencies/com/github/OpenCubicChunks/CubicChunks/1b8a0662a5_mapped_stable_39-1.12/CubicChunks-1b8a0662a5_mapped_stable_39-1.12.jar
+            property 'fml.coreMods.load', 'io.github.opencubicchunks.cubicchunks.core.asm.coremod.CubicChunksCoreMod,io.github.opencubicchunks.cubicchunks.cubicgen.asm.coremod.CubicGenCoreMod'
+            property 'mixin.env.disableRefMap', 'true'
+
+            mods {
+                terracommondatasets {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+            property 'fml.coreMods.load', 'io.github.opencubicchunks.cubicchunks.core.asm.coremod.CubicChunksCoreMod,io.github.opencubicchunks.cubicchunks.cubicgen.asm.coremod.CubicGenCoreMod'
+            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.compatibilityLevel', 'JAVA_8'
+
+            mods {
+                terracommondatasets {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 repositories {
@@ -41,28 +74,56 @@ repositories {
         name = "DaPorkchop_"
         url = "https://maven.daporkchop.net/"
     }
+    maven {
+        name = "SpongePowered"
+        url = "https://repo.spongepowered.org/maven/"
+    }
 }
 
 dependencies {
-	deobfProvided ("com.github.OpenCubicChunks.CubicChunks:cubicchunks:f71aafb9854466ac5ffa0ccd2796921684f1d8b1") {
+    minecraft(group: "net.minecraftforge", name: "forge", version: project.minecraft_vers + '-' + project.forge_vers)
+
+    implementation fg.deobf(group: "com.github.OpenCubicChunks", name: "CubicChunks", version: project.cubic_chunk_vers) {
         transitive = false
     }
-    deobfProvided ("com.github.OpenCubicChunks:CubicWorldGen:27de56d2f792513873584b2f8fd9f3082fb259ec") {
+    implementation fg.deobf(group: "com.github.OpenCubicChunks", name: "CubicWorldGen", version: project.cubic_world_gen_vers) {
         transitive = false
     }
-    deobfProvided ("com.github.BuildTheEarth:terraplusplus:35615cfe037b933a2b0e24271ba4759d5f94f5eb") {
+    implementation fg.deobf(group: "com.github.BuildTheEarth", name: "terraplusplus", version: project.terraplusplus_vers) {
         transitive = true
     }
+
+    // https://stackoverflow.com/questions/68377027/minecraft-forge-mod-loader-fml-loading-and-crashing-mc
+    implementation fg.deobf("net.minecraftforge:mergetool:0.2.3.3:forge") { force = true }
 }
 
 processResources {
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", project.minecraft_vers
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':project.version, 'mcversion':project.minecraft_vers
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : project.mod_id,
+                "Specification-Vendor"    : project.mod_author,
+                "Specification-Version"   : project.version,
+                "Implementation-Title"    : project.mod_id,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : project.mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+legacy {
+    fixClasspath = true
 }
